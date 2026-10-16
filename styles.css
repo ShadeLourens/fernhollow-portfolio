@@ -179,6 +179,37 @@ a {
   background: var(--orange);
 }
 
+/* The quieter button, used for Back: navy outline on white */
+.button-secondary {
+  padding: 14px 24px;
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-pill);
+  background: var(--white);
+  color: var(--navy);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.button-secondary:hover {
+  background: var(--mist);
+}
+
+/* A button that looks like a link, for "Change" */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--orange);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
 /* ==========================================================
    Page layout
    Phones first: one column. Wide screens: two columns.
@@ -236,6 +267,14 @@ a {
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+/* When a heading or question wraps, split it into even lines,
+   so one word isn't left alone on the last line */
+h1,
+h2,
+legend {
+  text-wrap: balance;
 }
 
 /* Grows with the screen, between 36px and 60px */
@@ -311,6 +350,15 @@ h1 {
   background: var(--amber);
 }
 
+/* Finished steps keep their amber bar. Screen readers hear "(completed)". */
+.progress-step.is-complete {
+  color: var(--navy);
+}
+
+.progress-step.is-complete::before {
+  background: var(--amber);
+}
+
 /* Each step stacks its parts with even space between them */
 .form-step {
   display: flex;
@@ -323,6 +371,8 @@ h1 {
   font-size: 1.5rem;
   font-weight: 800;
   line-height: 1.25;
+  /* Leaves a little space above the heading when focus scrolls to it */
+  scroll-margin-top: 16px;
 }
 
 .required-note {
@@ -382,7 +432,7 @@ legend {
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
-.frequency-option span {
+.option-label {
   display: block;
   padding: 12px 8px;
   border-radius: 8px;
@@ -393,7 +443,7 @@ legend {
 }
 
 /* The chosen option fills navy */
-.frequency-option input:checked + span {
+.frequency-option input:checked + .option-label {
   background: var(--navy);
   color: var(--white);
 }
@@ -470,13 +520,16 @@ legend {
   outline-offset: var(--focus-offset);
 }
 
-/* --- Other amount box --- */
+/* --- Fields: a label, an optional hint, the input and an error spot --- */
 
-.other-amount label {
+.field label {
   display: block;
+  margin-bottom: 6px;
   font-family: var(--font-heading);
   font-size: 1.0625rem;
   font-weight: 800;
+  /* Leaves space above the label when an error summary link scrolls to it */
+  scroll-margin-top: 16px;
 }
 
 .hint {
@@ -484,6 +537,37 @@ legend {
   color: var(--slate);
   font-size: 0.95rem;
 }
+
+/* Every text box and the country select share this look */
+.text-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 2px solid var(--slate);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--navy);
+  font-size: 1.125rem;
+}
+
+/* When typing in a box: a navy border with a soft peach ring around it,
+   instead of the usual navy outline, which looked too heavy here.
+   The see-through outline only shows in Windows high-contrast mode,
+   which removes shadows, so focus is still visible there. */
+.text-input:focus-visible {
+  border-color: var(--navy);
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 4px var(--peach);
+}
+
+/* Pairs of fields (first and last name, country and postal code):
+   stacked on small phones, side by side from 480px */
+.field-row {
+  display: grid;
+  gap: 24px;
+}
+
+/* --- Other amount box --- */
 
 /* The $ sits inside the input, on the left */
 .money-input {
@@ -498,24 +582,49 @@ legend {
   font-size: 1.125rem;
 }
 
-.money-input input {
-  width: 100%;
-  min-height: 48px;
-  padding: 8px 12px 8px 30px;
-  border: 2px solid var(--slate);
-  border-radius: var(--radius-md);
-  color: var(--navy);
-  font-size: 1.125rem;
+.money-input .text-input {
+  padding-left: 30px;
 }
 
-/* When typing in the box: a navy border with a soft peach ring around it,
-   instead of the usual navy outline, which looked too heavy here.
-   The see-through outline only shows in Windows high-contrast mode,
-   which removes shadows, so focus is still visible there. */
-.money-input input:focus-visible {
-  border-color: var(--navy);
-  outline: 2px solid transparent;
-  box-shadow: 0 0 0 4px var(--peach);
+/* --- Step 2 pieces --- */
+
+.gift-summary {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--mist);
+}
+
+/* The browser's own checkbox, a bit bigger and navy when ticked */
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.checkbox-field input {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--navy);
+}
+
+/* Back and Continue sit side by side. On narrow phones,
+   Continue drops below Back instead of squashing its words. */
+.step-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.step-buttons .button-primary {
+  flex: 1 1 12rem;
+  width: auto;
+}
+
+.privacy-note {
+  color: var(--slate);
+  font-size: 0.95rem;
 }
 
 /* --- Errors --- */
@@ -528,7 +637,7 @@ legend {
 
 /* An input with an error gets a navy border, not orange,
    because orange is too faint for a field's edge (2.9:1) */
-.money-input input[aria-invalid="true"] {
+.text-input[aria-invalid="true"] {
   border-color: var(--navy);
 }
 
@@ -560,6 +669,62 @@ legend {
   font-family: var(--font-heading);
   font-size: 0.8125rem;
   font-weight: 900;
+}
+
+/* The summary box: shown when a step has more than one error.
+   White text on navy (16.6:1), with links to each field. */
+.error-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  background: var(--navy);
+  color: var(--white);
+}
+
+/* Navy "!" on an amber circle (8.1:1) */
+.error-summary-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: var(--navy);
+  font-family: var(--font-heading);
+  font-weight: 900;
+}
+
+.error-summary-title {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+/* A bulleted list, so each error reads as its own item */
+.error-summary-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+/* Amber bullets on navy (8.1:1) */
+.error-summary-list li::marker {
+  color: var(--amber);
+}
+
+/* White links with orange underlines, like the footer (5.7:1) */
+.error-summary a {
+  color: var(--white);
+}
+
+/* Navy outlines would vanish on the navy box, so use amber here */
+.error-summary a:focus-visible {
+  outline-color: var(--amber);
 }
 
 /* --- Impact message --- */
@@ -620,6 +785,37 @@ legend {
 }
 
 /* ==========================================================
+   Very small phones (under 375px, like 320px and 360px)
+   Small tweaks so things fit neatly in the narrow space.
+   ========================================================== */
+
+@media (max-width: 23.375em) {
+  /* "Give / once" and "Give / monthly" both on two lines,
+     so the two halves of the toggle match */
+  .option-word {
+    display: block;
+  }
+
+  /* The impact icon sits above its sentence */
+  .impact {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .impact-message {
+    text-wrap: balance;
+  }
+
+  /* Smaller button text, so "Continue to payment" fits on one line */
+  .button-primary,
+  .button-secondary,
+  .jump-link {
+    padding-inline: 16px;
+    font-size: 1.0625rem;
+  }
+}
+
+/* ==========================================================
    Wider screens
    Sizes are in em, so the layout also adapts at 200% zoom.
    ========================================================== */
@@ -628,6 +824,10 @@ legend {
 @media (min-width: 30em) {
   .amount-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .field-row {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -678,9 +878,10 @@ legend {
   }
 
   .button-primary,
+  .button-secondary,
   .jump-link,
   .amount-option,
-  .frequency-option span {
+  .option-label {
     transition:
       background-color 0.15s,
       border-color 0.15s,
