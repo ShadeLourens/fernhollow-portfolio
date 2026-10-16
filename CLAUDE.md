@@ -16,6 +16,7 @@ styles.css     all the styling
 script.js      steps, validation and the fake payment
 assets/        logos, Biscuit photos, fonts
 assets/reference/   design and old notes (reference only, never edit)
+testing-screenshots/   screenshots from testing, named by step (like step2-errors-320-and-560.png)
 ```
 
 Don't add new files or folders without asking me first.
@@ -86,7 +87,7 @@ If the page URL ends in `?v=b`, show the second headline. Otherwise, show the no
 3. After a change, tell me simply what you changed and why.
 4. If I ask how something works, explain it line by line, without jargon.
 5. Ask before creating, moving or deleting files.
-6. Never commit or push. I do that myself.
+6. Commit and push only when I ask. Show me the commit message first and wait for my OK. End each commit message with `Co-Authored-By: Claude <noreply@anthropic.com>`, so the history shows we worked together.
 7. At the end of a session, remind me to add a line to `NOTES.md` about what I asked you to do and what I changed.
 
 ## Done means

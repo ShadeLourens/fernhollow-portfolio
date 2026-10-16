@@ -76,15 +76,32 @@
 
       <!-- Right column: the donation form card -->
       <div class="form-card" id="donate">
-        <!-- Progress bar. The colored bars are drawn by CSS. -->
+        <!-- Progress bar. The colored bars are drawn by CSS.
+             script.js fills the hidden "(completed)" text for finished steps. -->
         <ol class="progress" aria-label="Donation progress">
-          <li class="progress-step" aria-current="step">Amount</li>
-          <li class="progress-step">Your details</li>
-          <li class="progress-step">Payment</li>
+          <li class="progress-step" aria-current="step">
+            Amount<span class="visually-hidden completed-text"></span>
+          </li>
+          <li class="progress-step">
+            Your details<span class="visually-hidden completed-text"></span>
+          </li>
+          <li class="progress-step">
+            Payment<span class="visually-hidden completed-text"></span>
+          </li>
         </ol>
 
         <!-- novalidate turns off the browser's own error bubbles, so we can show our own messages -->
         <form class="donation-form" id="donation-form" novalidate>
+          <!-- Error summary, shared by all steps. Shown by script.js when a step
+               has more than one error. tabindex="-1" lets focus move here. -->
+          <div class="error-summary" id="error-summary" tabindex="-1" hidden>
+            <span class="error-summary-icon" aria-hidden="true">!</span>
+            <div>
+              <h2 class="error-summary-title" id="error-summary-title"></h2>
+              <ul class="error-summary-list" id="error-summary-list"></ul>
+            </div>
+          </div>
+
           <!-- Step 1: Choose your gift -->
           <section
             class="form-step"
@@ -104,11 +121,15 @@
               <legend>How often would you like to give?</legend>
               <label class="frequency-option">
                 <input type="radio" name="frequency" value="once" checked />
-                <span>Give once</span>
+                <span class="option-label">
+                  Give <span class="option-word">once</span>
+                </span>
               </label>
               <label class="frequency-option">
                 <input type="radio" name="frequency" value="monthly" />
-                <span>Give monthly</span>
+                <span class="option-label">
+                  Give <span class="option-word">monthly</span>
+                </span>
               </label>
             </fieldset>
 
@@ -230,13 +251,14 @@
             </fieldset>
 
             <!-- Shown by script.js only when "Other amount" is picked -->
-            <div class="other-amount" id="other-amount-box" hidden>
+            <div class="field other-amount" id="other-amount-box" hidden>
               <label for="other-amount">Other amount (USD)</label>
               <p class="hint" id="other-amount-hint">Minimum gift is $5</p>
               <div class="money-input">
                 <!-- The label already says USD, so screen readers skip the $ sign -->
                 <span class="money-prefix" aria-hidden="true">$</span>
                 <input
+                  class="text-input"
                   type="text"
                   id="other-amount"
                   name="other-amount"
@@ -264,6 +286,135 @@
             </div>
 
             <button type="submit" class="button-primary">Continue</button>
+          </section>
+
+          <!-- Step 2: Your details. Hidden until step 1 is done. -->
+          <section
+            class="form-step"
+            id="step-2"
+            aria-labelledby="step-2-heading"
+            hidden
+          >
+            <h2 id="step-2-heading" tabindex="-1">Step 2 of 3: Your details</h2>
+            <p class="required-note">
+              All fields are required unless marked optional.
+            </p>
+
+            <!-- script.js fills in the amount and how often -->
+            <p class="gift-summary">
+              Your gift: <strong id="gift-amount">$50</strong>
+              <span id="gift-frequency">one-time</span>.
+              <!-- A button, because it does something on the page instead of going somewhere -->
+              <button type="button" class="link-button" id="change-gift">
+                Change<span class="visually-hidden"> your gift</span>
+              </button>
+            </p>
+
+            <!-- Pairs of fields: side by side from 480px, stacked on small phones -->
+            <div class="field-row">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  autocomplete="given-name"
+                  aria-describedby="first-name-error"
+                />
+                <p class="error-message" id="first-name-error"></p>
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  autocomplete="family-name"
+                  aria-describedby="last-name-error"
+                />
+                <p class="error-message" id="last-name-error"></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <p class="hint" id="email-hint">We'll send your receipt here.</p>
+              <input
+                class="text-input"
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                aria-describedby="email-hint email-error"
+              />
+              <p class="error-message" id="email-error"></p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="country">Country</label>
+                <select
+                  class="text-input"
+                  id="country"
+                  name="country"
+                  autocomplete="country-name"
+                  aria-describedby="country-error"
+                >
+                  <option value="">Select…</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="AU">Australia</option>
+                  <option value="IE">Ireland</option>
+                  <option value="NZ">New Zealand</option>
+                  <option value="ZA">South Africa</option>
+                </select>
+                <p class="error-message" id="country-error"></p>
+              </div>
+
+              <div class="field">
+                <label for="postal-code">Postal code</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  id="postal-code"
+                  name="postal-code"
+                  autocomplete="postal-code"
+                  aria-describedby="postal-code-error"
+                />
+                <p class="error-message" id="postal-code-error"></p>
+              </div>
+            </div>
+
+            <!-- Unticked by default, and separate from giving -->
+            <div class="checkbox-field">
+              <input type="checkbox" id="email-updates" name="email-updates" />
+              <label for="email-updates">
+                Yes, email me updates about rescues and ways to help. You can
+                unsubscribe at any time.
+              </label>
+            </div>
+
+            <!-- type="button" so Back doesn't submit the form -->
+            <div class="step-buttons">
+              <button
+                type="button"
+                class="button-secondary"
+                id="back-to-step-1"
+              >
+                Back
+              </button>
+              <button type="submit" class="button-primary">
+                Continue to payment
+              </button>
+            </div>
+
+            <p class="privacy-note">
+              We use your details to process your gift and send your receipt.
+              Read our <a href="#">Privacy Policy</a>.
+            </p>
           </section>
         </form>
       </div>
