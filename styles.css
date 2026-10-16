@@ -1,0 +1,689 @@
+/* ==========================================================
+   Fonts
+   Loaded from our own files. "swap" shows text straight away
+   in a backup font, then switches when the real font arrives.
+   ========================================================== */
+
+/* Nunito Sans is a variable font: one file holds every weight
+   from 200 to 1000, so we tell the browser the full range */
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("assets/fonts/nunito-sans-latin-wght.woff2") format("woff2");
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("assets/fonts/atkinson-hyperlegible-latin-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  src: url("assets/fonts/atkinson-hyperlegible-latin-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ==========================================================
+   Variables
+   Brand colors, fonts and sizes, so we only have to change
+   them in one place. Contrast notes come from _tokens.scss.
+   ========================================================== */
+
+:root {
+  /* Colors */
+  --navy: #001f3d; /* Main text. 16.6:1 on white */
+  --teal: #045174; /* Intro text. 8.6:1 on white */
+  --amber: #ffa000; /* Buttons, with navy text (8.1:1) */
+  --orange: #e87a00; /* Borders and underlines only, never text on white */
+  --peach: #f8dcbf;
+  --cream: #fdf1e4;
+  --slate: #5f7486; /* Small text and form control borders. 4.9:1 on white */
+  --mist: #f1f4f7;
+  --line: #dfe4e9; /* Card edges only */
+  --line-light: #e6eaee; /* Decorative lines only */
+  --white: #fff;
+
+  /* Fonts */
+  --font-heading: "Nunito Sans", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+
+  /* Rounded corners */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --container-max: 1160px;
+  --gutter: 16px; /* Space at the sides of the page. Grows on wide screens. */
+
+  /* Focus outline */
+  --focus-width: 3px;
+  --focus-offset: 3px;
+}
+
+/* ==========================================================
+   Basics
+   ========================================================== */
+
+/* Make widths include padding and borders, so sizes add up as expected */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove the browser's default spacing. We add our own. */
+body,
+h1,
+h2,
+p,
+ol,
+ul,
+fieldset {
+  margin: 0;
+}
+
+body {
+  background: var(--white);
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Images never grow wider than the space they sit in */
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* Form controls use the page font instead of the browser's own */
+input,
+button {
+  font: inherit;
+}
+
+/* Anything with the "hidden" attribute stays hidden,
+   even if another rule below gives it a display style */
+[hidden] {
+  display: none !important;
+}
+
+/* ==========================================================
+   Shared pieces
+   ========================================================== */
+
+/* A clear outline on whatever has keyboard focus */
+:focus-visible {
+  outline: var(--focus-width) solid var(--navy);
+  outline-offset: var(--focus-offset);
+}
+
+/* Navy text with an orange underline. Orange is decoration only. */
+a {
+  color: var(--navy);
+  text-decoration-color: var(--orange);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* Hidden above the page until someone presses Tab */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--gutter);
+  z-index: 10;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--amber);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+/* The amber button style, shared by Continue and the "Give now" link.
+   Navy text on amber (8.1:1) and on orange when hovered (5.7:1). */
+.button-primary,
+.jump-link {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--amber);
+  color: var(--navy);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-primary:hover,
+.jump-link:hover {
+  background: var(--orange);
+}
+
+/* ==========================================================
+   Page layout
+   Phones first: one column. Wide screens: two columns.
+   The side padding keeps content inside 1160px, centered,
+   while the header border and footer color still reach the edges.
+   ========================================================== */
+
+.site-header,
+.page,
+.site-footer {
+  padding-inline: max(var(--gutter), (100% - var(--container-max)) / 2);
+}
+
+.page {
+  display: grid;
+  gap: 40px;
+  padding-block: 32px 56px;
+}
+
+/* ==========================================================
+   Header
+   ========================================================== */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line-light);
+}
+
+.logo-link img {
+  width: 170px;
+}
+
+.header-link {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+/* ==========================================================
+   Story column (left)
+   ========================================================== */
+
+.campaign-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  border-bottom: 3px solid var(--orange);
+  border-radius: var(--radius-sm);
+  background: var(--peach);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Grows with the screen, between 36px and 60px */
+h1 {
+  margin-top: 20px;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.intro {
+  max-width: 36rem;
+  margin-top: 20px;
+  color: var(--teal);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.jump-link {
+  margin-top: 24px;
+}
+
+.story-photo {
+  width: 100%;
+  max-width: 480px;
+  margin-top: 32px;
+  border-radius: var(--radius-lg);
+}
+
+/* ==========================================================
+   Form card (right)
+   ========================================================== */
+
+.form-card {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  /* Leaves a little space above the card when a link jumps to it */
+  scroll-margin-top: 16px;
+}
+
+/* Progress bar: a thin bar above each step name */
+.progress {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 0;
+  list-style: none;
+  color: var(--slate);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.progress-step::before {
+  content: "";
+  display: block;
+  height: 6px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--line-light);
+}
+
+/* The step the donor is on */
+.progress-step[aria-current="step"] {
+  color: var(--navy);
+}
+
+.progress-step[aria-current="step"]::before {
+  background: var(--amber);
+}
+
+/* Each step stacks its parts with even space between them */
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-step h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.required-note {
+  margin-top: -8px;
+  color: var(--teal);
+  font-size: 0.95rem;
+}
+
+/* Remove the default box around groups of options */
+fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  padding: 0 0 12px;
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+/* Hidden on screen but still read by screen readers.
+   Used for the "Error:" label, and for the real radio circles,
+   where the styled box around each one is what people see. */
+.visually-hidden,
+.frequency-option input,
+.amount-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- Frequency: two radios that look like one toggle --- */
+
+.frequency {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.frequency-option {
+  padding: 6px;
+  background: var(--mist);
+  cursor: pointer;
+}
+
+.frequency-option:first-of-type {
+  padding-right: 3px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.frequency-option:last-of-type {
+  padding-left: 3px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.frequency-option span {
+  display: block;
+  padding: 12px 8px;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* The chosen option fills navy */
+.frequency-option input:checked + span {
+  background: var(--navy);
+  color: var(--white);
+}
+
+/* The radio itself is hidden, so show the focus outline on its box instead */
+.frequency-option:has(input:focus-visible) {
+  outline: var(--focus-width) solid var(--navy);
+  outline-offset: var(--focus-offset);
+}
+
+.monthly-note {
+  margin-top: -8px;
+  color: var(--teal);
+}
+
+/* --- Amounts --- */
+
+/* Two across on small phones, so "$250" still fits */
+.amount-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.amount-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 56px;
+  padding: 8px;
+  border: 2px solid var(--slate);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* "Other amount" takes a whole row */
+.amount-option-other {
+  grid-column: 1 / -1;
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.amount-option:hover {
+  border-color: var(--navy);
+}
+
+/* The check icon only shows on the chosen amount */
+.check-icon {
+  display: none;
+  flex-shrink: 0;
+}
+
+/* The chosen amount: thicker orange border, cream fill and a check icon,
+   so it never relies on color alone. The padding shrinks by 1px to make
+   up for the thicker border, so the box stays the same size. */
+.amount-option:has(input:checked) {
+  padding: 7px;
+  border: 3px solid var(--orange);
+  background: var(--cream);
+}
+
+.amount-option:has(input:checked) .check-icon {
+  display: block;
+}
+
+/* The radio itself is hidden, so show the focus outline on its box instead */
+.amount-option:has(input:focus-visible) {
+  outline: var(--focus-width) solid var(--navy);
+  outline-offset: var(--focus-offset);
+}
+
+/* --- Other amount box --- */
+
+.other-amount label {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+
+.hint {
+  margin-bottom: 8px;
+  color: var(--slate);
+  font-size: 0.95rem;
+}
+
+/* The $ sits inside the input, on the left */
+.money-input {
+  position: relative;
+}
+
+.money-prefix {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 1.125rem;
+}
+
+.money-input input {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px 8px 30px;
+  border: 2px solid var(--slate);
+  border-radius: var(--radius-md);
+  color: var(--navy);
+  font-size: 1.125rem;
+}
+
+/* When typing in the box: a navy border with a soft peach ring around it,
+   instead of the usual navy outline, which looked too heavy here.
+   The see-through outline only shows in Windows high-contrast mode,
+   which removes shadows, so focus is still visible there. */
+.money-input input:focus-visible {
+  border-color: var(--navy);
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 4px var(--peach);
+}
+
+/* --- Errors --- */
+
+/* A field group with an error gets an orange stripe down its left side */
+.has-error {
+  padding-left: 12px;
+  border-left: 4px solid var(--orange);
+}
+
+/* An input with an error gets a navy border, not orange,
+   because orange is too faint for a field's edge (2.9:1) */
+.money-input input[aria-invalid="true"] {
+  border-color: var(--navy);
+}
+
+/* Bold navy words with a "!" icon, so errors never rely on color alone */
+.error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* Empty error spots take up no space */
+.error-message:empty {
+  display: none;
+}
+
+/* Navy "!" on an orange circle (5.7:1) */
+.error-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--navy);
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 900;
+}
+
+/* --- Impact message --- */
+
+.impact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius-md);
+  background: var(--cream);
+}
+
+.impact-icon {
+  flex-shrink: 0;
+}
+
+/* ==========================================================
+   Footer
+   ========================================================== */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 40px;
+  background: var(--navy);
+  color: var(--white);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  padding: 0;
+  list-style: none;
+}
+
+/* White links with orange underlines. Orange on navy passes (5.7:1). */
+.site-footer a {
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* Navy outlines would vanish on the navy footer, so use amber here */
+.site-footer :focus-visible {
+  outline-color: var(--amber);
+}
+
+.footer-note {
+  max-width: 34rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ==========================================================
+   Wider screens
+   Sizes are in em, so the layout also adapts at 200% zoom.
+   ========================================================== */
+
+/* 480px and up: amounts fit four across */
+@media (min-width: 30em) {
+  .amount-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 900px and up: story on the left, form on the right */
+@media (min-width: 56.25em) {
+  :root {
+    --gutter: 24px;
+  }
+
+  .page {
+    grid-template-columns: 1fr minmax(0, 560px);
+    gap: 64px;
+    align-items: start;
+    padding-block: 56px 80px;
+  }
+
+  .logo-link img {
+    width: 186px;
+  }
+
+  .intro {
+    font-size: 1.25rem;
+  }
+
+  /* The form is already in view, so the jump link isn't needed */
+  .jump-link {
+    display: none;
+  }
+
+  .form-card {
+    padding: 32px;
+  }
+
+  .amount-option {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==========================================================
+   Motion
+   Smooth scrolling and color fades only for people who
+   haven't asked their device to reduce motion.
+   ========================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .button-primary,
+  .jump-link,
+  .amount-option,
+  .frequency-option span {
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+}

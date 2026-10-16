@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Donate | Fernhollow Animal Alliance</title>
+    <meta
+      name="description"
+      content="Give a rescued dog a second chance with a gift to Fernhollow Animal Alliance, a fictional charity."
+    />
+    <link rel="icon" href="assets/FAA-Logo-Mark.svg" type="image/svg+xml" />
+
+    <!-- Start downloading the two main fonts early, so text doesn't jump when they arrive -->
+    <link
+      rel="preload"
+      href="assets/fonts/nunito-sans-latin-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/atkinson-hyperlegible-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <!-- "defer" runs the script after the page has been built -->
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!-- Lets keyboard users jump past the header. Hidden until it gets focus. -->
+    <a class="skip-link" href="#donate">Skip to donation form</a>
+
+    <header class="site-header">
+      <a href="index.html" class="logo-link">
+        <img
+          src="assets/FAA-Logo-horizontal.svg"
+          alt="Fernhollow Animal Alliance home"
+          width="220"
+          height="47"
+        />
+      </a>
+      <a href="#" class="header-link">Contact us</a>
+    </header>
+
+    <main class="page">
+      <!-- Left column: the campaign story -->
+      <div class="story">
+        <p class="campaign-tag">Second Chances Campaign</p>
+        <!-- script.js swaps this text for the B headline when the URL ends in ?v=b -->
+        <h1 id="headline">Give a dog the second chance they deserve</h1>
+        <p class="intro">
+          Your gift helps Fernhollow Animal Alliance rescue dogs from puppy
+          mills, give them the veterinary care they need, and find them loving
+          homes.
+        </p>
+        <!-- On phones the form is below the photo, so this jumps straight to it. CSS hides it on wide screens. -->
+        <a href="#donate" class="jump-link">Give now</a>
+        <!-- Phones get the smaller 480px photo -->
+        <img
+          class="story-photo"
+          src="assets/Biscuit-puppy-optimized.jpg"
+          srcset="
+            assets/Biscuit-puppy-optimized-480.jpg 480w,
+            assets/Biscuit-puppy-optimized.jpg     962w
+          "
+          sizes="(max-width: 600px) 100vw, 480px"
+          width="962"
+          height="720"
+          alt="Biscuit, a small scruffy puppy, looks out through the bars of a wire cage."
+        />
+      </div>
+
+      <!-- Right column: the donation form card -->
+      <div class="form-card" id="donate">
+        <!-- Progress bar. The colored bars are drawn by CSS. -->
+        <ol class="progress" aria-label="Donation progress">
+          <li class="progress-step" aria-current="step">Amount</li>
+          <li class="progress-step">Your details</li>
+          <li class="progress-step">Payment</li>
+        </ol>
+
+        <!-- novalidate turns off the browser's own error bubbles, so we can show our own messages -->
+        <form class="donation-form" id="donation-form" novalidate>
+          <!-- Step 1: Choose your gift -->
+          <section
+            class="form-step"
+            id="step-1"
+            aria-labelledby="step-1-heading"
+          >
+            <!-- tabindex="-1" lets the script move focus here when the step changes -->
+            <h2 id="step-1-heading" tabindex="-1">
+              Step 1 of 3: Choose your gift
+            </h2>
+            <p class="required-note">
+              All fields are required unless marked optional.
+            </p>
+
+            <!-- Real radio buttons, styled by CSS to look like a two-part toggle -->
+            <fieldset class="frequency">
+              <legend>How often would you like to give?</legend>
+              <label class="frequency-option">
+                <input type="radio" name="frequency" value="once" checked />
+                <span>Give once</span>
+              </label>
+              <label class="frequency-option">
+                <input type="radio" name="frequency" value="monthly" />
+                <span>Give monthly</span>
+              </label>
+            </fieldset>
+
+            <!-- Shown by script.js only when "Give monthly" is picked -->
+            <p class="monthly-note" id="monthly-note" hidden>
+              Monthly gifts let us plan rescues ahead. Cancel any time.
+            </p>
+
+            <!-- script.js changes these values and labels when the donor switches to monthly -->
+            <fieldset class="amounts">
+              <legend>Choose an amount</legend>
+              <div class="amount-grid">
+                <label class="amount-option">
+                  <input type="radio" name="amount" value="25" />
+                  <svg
+                    class="check-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M3 8.5l3 3 7-7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="amount-text">$25</span>
+                </label>
+                <label class="amount-option">
+                  <input type="radio" name="amount" value="50" checked />
+                  <svg
+                    class="check-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M3 8.5l3 3 7-7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="amount-text">$50</span>
+                </label>
+                <label class="amount-option">
+                  <input type="radio" name="amount" value="100" />
+                  <svg
+                    class="check-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M3 8.5l3 3 7-7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="amount-text">$100</span>
+                </label>
+                <label class="amount-option">
+                  <input type="radio" name="amount" value="250" />
+                  <svg
+                    class="check-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M3 8.5l3 3 7-7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="amount-text">$250</span>
+                </label>
+                <label class="amount-option amount-option-other">
+                  <input type="radio" name="amount" value="other" />
+                  <svg
+                    class="check-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 16 16"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      d="M3 8.5l3 3 7-7"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="amount-text">Other amount</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Shown by script.js only when "Other amount" is picked -->
+            <div class="other-amount" id="other-amount-box" hidden>
+              <label for="other-amount">Other amount (USD)</label>
+              <p class="hint" id="other-amount-hint">Minimum gift is $5</p>
+              <div class="money-input">
+                <!-- The label already says USD, so screen readers skip the $ sign -->
+                <span class="money-prefix" aria-hidden="true">$</span>
+                <input
+                  type="text"
+                  id="other-amount"
+                  name="other-amount"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  aria-describedby="other-amount-hint other-amount-error"
+                />
+              </div>
+              <!-- Empty until there's an error to show. All amount errors go here. -->
+              <p class="error-message" id="other-amount-error"></p>
+            </div>
+
+            <!-- Screen readers read this out politely whenever the amount changes -->
+            <div class="impact">
+              <img
+                class="impact-icon"
+                src="assets/FAA-Logo-Mark.svg"
+                alt=""
+                width="48"
+                height="40"
+              />
+              <p class="impact-message" id="impact-message" aria-live="polite">
+                Helps provide vaccinations and a safe place to recover.
+              </p>
+            </div>
+
+            <button type="submit" class="button-primary">Continue</button>
+          </section>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Contact us</a></li>
+      </ul>
+      <p class="footer-note">
+        Fernhollow Animal Alliance is a fictional organization created for a
+        portfolio. No payments are processed.
+      </p>
+    </footer>
+  </body>
+</html>
