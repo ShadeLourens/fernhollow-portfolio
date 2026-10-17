@@ -8,6 +8,7 @@
 const form = document.querySelector("#donation-form");
 const headline = document.querySelector("#headline");
 const steps = document.querySelectorAll(".form-step");
+const progressBar = document.querySelector(".progress");
 const progressSteps = document.querySelectorAll(".progress-step");
 
 // Step 1
@@ -36,6 +37,7 @@ const lastNameInput = document.querySelector("#last-name");
 const emailInput = document.querySelector("#email");
 const countrySelect = document.querySelector("#country");
 const postalCodeInput = document.querySelector("#postal-code");
+const emailUpdatesCheckbox = document.querySelector("#email-updates");
 
 // Step 3
 const backToStep2Button = document.querySelector("#back-to-step-2");
@@ -48,6 +50,24 @@ const monthlyNotice = document.querySelector("#monthly-notice");
 const monthlyTotalText = document.querySelector("#monthly-total");
 const giveButton = document.querySelector("#give-button");
 const paymentStatus = document.querySelector("#payment-status");
+
+// Thank-you step
+const thankYou = document.querySelector("#thank-you");
+const thankYouHeading = document.querySelector("#thank-you-heading");
+const thankYouName = document.querySelector("#thank-you-name");
+const thankYouGift = document.querySelector("#thank-you-gift");
+const thankYouEmail = document.querySelector("#thank-you-email");
+const thankYouImpact = document.querySelector("#thank-you-impact");
+const thankYouStatus = document.querySelector("#thank-you-status");
+const petitionButton = document.querySelector("#petition-button");
+const petitionNote = document.querySelector("#petition-note");
+const copyLinkButton = document.querySelector("#copy-link-button");
+const copyFallback = document.querySelector("#copy-fallback");
+const shareLinkInput = document.querySelector("#share-link");
+const updatesSignup = document.querySelector("#updates-signup");
+const updatesButton = document.querySelector("#updates-button");
+const updatesDone = document.querySelector("#updates-done");
+const restartButton = document.querySelector("#restart-button");
 
 // Error summary
 const errorSummary = document.querySelector("#error-summary");
@@ -541,11 +561,102 @@ function startPayment() {
       cardNumberInput.value = "";
       cardExpiryInput.value = "";
       cardCvcInput.value = "";
-      // Showing the thank-you step comes in the next step
+      showThankYou();
     } else {
       showPaymentFailed();
     }
   }, 1500);
+}
+
+// ----------------------------------------------------------
+// Thank-you step
+// ----------------------------------------------------------
+
+// The impact line from step 1, turned into "Your gift helps…".
+// "Other amount" gifts get the general line, as in step 1.
+function getThankYouImpact() {
+  if (otherRadio.checked) {
+    return otherAmountLine;
+  }
+  const line = impactLines[giftAmount];
+  return "Your gift " + line.charAt(0).toLowerCase() + line.slice(1);
+}
+
+// Fills in the thank-you step, hides the form and moves focus to the heading
+function showThankYou() {
+  const total = formatMoney(getPaymentTotals().total);
+  const howOften = giftFrequency === "monthly" ? "monthly" : "one-time";
+
+  // textContent shows whatever the donor typed as plain text
+  thankYouName.textContent = firstNameInput.value.trim();
+  thankYouGift.textContent = total + " " + howOften;
+  thankYouEmail.textContent = emailInput.value.trim();
+  thankYouImpact.textContent = getThankYouImpact();
+
+  // Only offer updates to donors who didn't tick the box in step 2
+  updatesSignup.hidden = emailUpdatesCheckbox.checked;
+
+  form.hidden = true;
+  progressBar.hidden = true;
+  thankYou.hidden = false;
+  thankYouHeading.focus();
+}
+
+// The campaign's address without "?v=b" or "#donate",
+// so a shared link doesn't put friends into one A/B group
+function getShareLink() {
+  const address = new URL(window.location.href);
+  address.search = "";
+  address.hash = "";
+  return address.href;
+}
+
+function showLinkCopied() {
+  copyLinkButton.textContent = "Link copied";
+  // Read out too, because a button's changing words often aren't
+  thankYouStatus.textContent = "Link copied";
+}
+
+// If the browser can't copy, show the link in a box, already selected,
+// so the donor can copy it with Cmd+C or Ctrl+C
+function showCopyFallback(link) {
+  shareLinkInput.value = link;
+  copyFallback.hidden = false;
+  shareLinkInput.focus();
+  shareLinkInput.select();
+}
+
+// Puts everything back as if the page had just loaded
+function restartDemo() {
+  // Every field back to how the HTML started (Give once, $50, empty boxes),
+  // then step 1's amounts and impact line to match
+  form.reset();
+  updateAmounts();
+  form.querySelectorAll('[aria-invalid="true"]').forEach(clearError);
+
+  // reset() only changes fields, so the rest is put back by hand
+  giftAmount = 0;
+  giftFrequency = "once";
+  isProcessing = false;
+  giveButton.removeAttribute("aria-disabled");
+  paymentStatus.textContent = "";
+
+  copyLinkButton.textContent = "Copy link";
+  copyFallback.hidden = true;
+  shareLinkInput.value = "";
+  petitionNote.textContent = "";
+  thankYouStatus.textContent = "";
+  updatesButton.hidden = false;
+  updatesDone.hidden = true;
+
+  thankYou.hidden = true;
+  form.hidden = false;
+  progressBar.hidden = false;
+
+  // showStep(1) also hides the error summary and clears the progress
+  // bar's "(completed)" labels. The Give button's words don't need
+  // resetting: updatePaymentStep() writes them fresh when step 3 opens.
+  showStep(1);
 }
 
 // ----------------------------------------------------------
@@ -611,6 +722,41 @@ form.addEventListener("submit", function (event) {
     }
   }
 });
+
+// The petition: explain it's a demo instead of linking nowhere
+petitionButton.addEventListener("click", function () {
+  petitionNote.textContent =
+    "This is a demo, so there's no petition page. In a real campaign, this would open the petition.";
+});
+
+// Copy link. The clipboard only works on secure (HTTPS) pages.
+// writeText() takes a moment, so .then() says what to do
+// when it works, and what to do if it fails.
+//
+// To test the fallback on the live page, paste this into the
+// DevTools Console, then click Copy link (refreshing undoes it):
+//   navigator.clipboard.writeText = () => Promise.reject()
+copyLinkButton.addEventListener("click", function () {
+  const link = getShareLink();
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(showLinkCopied, function () {
+      showCopyFallback(link);
+    });
+  } else {
+    showCopyFallback(link);
+  }
+});
+
+// Signing up for updates: the button disappears, so focus moves to the
+// message. Otherwise keyboard users would be sent back to the top.
+updatesButton.addEventListener("click", function () {
+  updatesButton.hidden = true;
+  updatesDone.hidden = false;
+  updatesDone.focus();
+});
+
+restartButton.addEventListener("click", restartDemo);
 
 // Run once on load too, because browsers can restore
 // ticked radios after a refresh

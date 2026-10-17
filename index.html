@@ -515,6 +515,82 @@
             <p class="visually-hidden" role="status" id="payment-status"></p>
           </section>
         </form>
+
+        <!-- Thank-you step. Shown by script.js after a successful payment.
+             It sits outside the form, so its buttons can never submit it. -->
+        <section
+          class="thank-you"
+          id="thank-you"
+          aria-labelledby="thank-you-heading"
+          hidden
+        >
+          <img
+            class="thank-you-logo"
+            src="assets/FAA-Logo-Mark.svg"
+            alt=""
+            width="64"
+            height="54"
+          />
+          <!-- tabindex="-1" lets the script move focus here -->
+          <h2 id="thank-you-heading" tabindex="-1">
+            Thank you, <span id="thank-you-name"></span>.
+          </h2>
+          <!-- script.js fills in the amount, how often and the email -->
+          <p>
+            Your <strong id="thank-you-gift">$50 one-time</strong> gift is
+            helping dogs like Biscuit get the care and the home they deserve.
+            A receipt is on its way to <strong id="thank-you-email"></strong>.
+          </p>
+          <!-- Straight after the receipt sentence, because it's about that sentence -->
+          <p class="privacy-note demo-email-note">Demo: no email is actually sent.</p>
+          <!-- What the gift does, reusing step 1's impact lines -->
+          <p class="thank-you-impact" id="thank-you-impact"></p>
+
+          <div class="thank-you-card">
+            <h3>Add your voice</h3>
+            <p>Sign our petition to end puppy mill cruelty.</p>
+            <!-- There's no petition page, so the button says "(demo)" and
+                 explains instead of linking nowhere -->
+            <button type="button" class="button-primary" id="petition-button">
+              Sign petition (demo)
+            </button>
+            <!-- A status message: screen readers read it out when it's filled -->
+            <p class="thank-you-note" id="petition-note" role="status"></p>
+          </div>
+
+          <div class="thank-you-card">
+            <h3>Spread the word</h3>
+            <p>Share this campaign with a friend.</p>
+            <button type="button" class="button-secondary" id="copy-link-button">
+              Copy link
+            </button>
+            <!-- Shown only if the browser can't copy for us -->
+            <div class="field" id="copy-fallback" hidden>
+              <label for="share-link">Copy this link:</label>
+              <input class="text-input" type="text" id="share-link" readonly />
+            </div>
+          </div>
+
+          <!-- Shown only to donors who didn't tick the email box in step 2 -->
+          <div class="updates-signup" id="updates-signup" hidden>
+            <p>Want to hear how your gift is used?</p>
+            <button type="button" class="button-secondary" id="updates-button">
+              Sign up for updates
+            </button>
+            <!-- tabindex="-1" lets focus move here when the button disappears -->
+            <p class="thank-you-note" id="updates-done" tabindex="-1" hidden>
+              You're signed up for updates.
+            </p>
+          </div>
+
+          <button type="button" class="button-secondary restart-button" id="restart-button">
+            Restart demo
+          </button>
+
+          <!-- Hidden on screen. Screen readers announce what's put in here,
+               like "Link copied" -->
+          <p class="visually-hidden" role="status" id="thank-you-status"></p>
+        </section>
       </div>
     </main>
 

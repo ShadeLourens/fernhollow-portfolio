@@ -81,6 +81,7 @@
 body,
 h1,
 h2,
+h3,
 p,
 ol,
 ul,
@@ -772,6 +773,79 @@ legend {
 }
 
 /* ==========================================================
+   Thank-you step
+   ========================================================== */
+
+/* Stacks its parts with even space between them, like the form steps */
+.thank-you {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.thank-you-logo {
+  align-self: center;
+}
+
+.thank-you h2 {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  /* Leaves a little space above the heading when focus scrolls to it */
+  scroll-margin-top: 16px;
+}
+
+/* Sits close under the receipt sentence it's about */
+.demo-email-note {
+  margin-top: -12px;
+}
+
+/* What the gift does: the same cream box as the impact line in step 1 */
+.thank-you-impact {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  background: var(--cream);
+}
+
+/* The petition and share cards. They stack, because even on desktop
+   the form card is too narrow for two cards with full-size buttons. */
+.thank-you-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.thank-you-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+/* Short confirmations, like "You're signed up for updates" */
+.thank-you-note {
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.updates-signup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--radius-md);
+  background: var(--mist);
+}
+
+.restart-button {
+  align-self: center;
+}
+
+/* ==========================================================
    Footer
    ========================================================== */
 
@@ -833,6 +907,12 @@ legend {
 
   .impact-message {
     text-wrap: balance;
+  }
+
+  /* Less padding in the thank-you boxes, so their buttons are wider */
+  .thank-you-card,
+  .updates-signup {
+    padding: 16px;
   }
 
   /* Smaller button text, so "Continue to payment" fits on one line */
