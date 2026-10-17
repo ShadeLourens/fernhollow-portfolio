@@ -37,9 +37,22 @@ const emailInput = document.querySelector("#email");
 const countrySelect = document.querySelector("#country");
 const postalCodeInput = document.querySelector("#postal-code");
 
+// Step 3
+const backToStep2Button = document.querySelector("#back-to-step-2");
+const cardNumberInput = document.querySelector("#card-number");
+const cardExpiryInput = document.querySelector("#card-expiry");
+const cardCvcInput = document.querySelector("#card-cvc");
+const coverFeeCheckbox = document.querySelector("#cover-fee");
+const feeAmountText = document.querySelector("#fee-amount");
+const monthlyNotice = document.querySelector("#monthly-notice");
+const monthlyTotalText = document.querySelector("#monthly-total");
+const giveButton = document.querySelector("#give-button");
+const paymentStatus = document.querySelector("#payment-status");
+
 // Error summary
 const errorSummary = document.querySelector("#error-summary");
 const errorSummaryTitle = document.querySelector("#error-summary-title");
+const errorSummaryText = document.querySelector("#error-summary-text");
 const errorSummaryList = document.querySelector("#error-summary-list");
 
 // ----------------------------------------------------------
@@ -75,7 +88,19 @@ const errorMessages = {
   emailInvalid: "Please enter a valid email address, like name@example.com.",
   country: "Please select your country.",
   postalCode: "Please enter your postal code.",
+  cardNumber: "Your card number looks incomplete.",
+  cardExpiry: "Please check your expiry date.",
+  cardCvc: "Please enter your 3-digit security code.",
 };
+
+// The only card number that "succeeds" in this demo
+const testCardNumber = "4242424242424242";
+
+// A card number: 13 to 19 digits, once spaces and dashes are removed
+const validCardNumber = /^\d{13,19}$/;
+
+// A security code: exactly 3 digits
+const validCvc = /^\d{3}$/;
 
 // A valid amount: one or more digits, then optionally
 // a dot and one or two digits. So 25, 25.5 and 25.50 pass.
@@ -98,6 +123,9 @@ let currentStep = 1;
 // instead of reading the form again
 let giftAmount = 0;
 let giftFrequency = "once";
+
+// True while the fake payment is running, so extra presses are ignored
+let isProcessing = false;
 
 // ----------------------------------------------------------
 // A/B test: show headline B when the URL ends in ?v=b
@@ -132,6 +160,32 @@ function formatMoney(amount) {
 // so "$25" becomes "25" and "1,000" becomes "1000"
 function cleanAmount(typed) {
   return typed.replace(/[\s,]/g, "").replace(/^\$/, "");
+}
+
+// Removes spaces and dashes from a card number,
+// so "4242 4242 4242 4242" becomes "4242424242424242"
+function cleanCardNumber(typed) {
+  return typed.replace(/[\s-]/g, "");
+}
+
+// Checks an expiry like "08/28": four digits once spaces and the slash
+// are removed, a real month (01 to 12), and not before this month
+function isValidExpiry(typed) {
+  const digits = typed.replace(/[\s/]/g, "");
+  if (!/^\d{4}$/.test(digits)) {
+    return false;
+  }
+
+  const month = Number(digits.slice(0, 2));
+  const year = 2000 + Number(digits.slice(2));
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const thisMonth = today.getMonth() + 1; // getMonth() counts from 0
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+  return year > thisYear || (year === thisYear && month >= thisMonth);
 }
 
 // ----------------------------------------------------------
@@ -266,6 +320,7 @@ function focusField(input) {
 function showErrorSummary(errors) {
   errorSummaryTitle.textContent =
     "Please fix " + errors.length + " things to continue";
+  errorSummaryText.textContent = "";
   errorSummaryList.textContent = "";
 
   errors.forEach(function (error) {
@@ -290,7 +345,18 @@ function showErrorSummary(errors) {
 
 function hideErrorSummary() {
   errorSummary.hidden = true;
+  errorSummaryText.textContent = "";
   errorSummaryList.textContent = "";
+}
+
+// Shows the declined-card message in the summary box and moves focus to it
+function showPaymentFailed() {
+  errorSummaryTitle.textContent = "We couldn't process your payment.";
+  errorSummaryText.textContent =
+    "Please check your details or try another card.";
+  errorSummaryList.textContent = "";
+  errorSummary.hidden = false;
+  errorSummary.focus();
 }
 
 // Shows a step's errors. With one error, focus goes to that field.
@@ -378,6 +444,26 @@ function checkStep2() {
   return errors;
 }
 
+function checkStep3() {
+  const errors = [];
+
+  [cardNumberInput, cardExpiryInput, cardCvcInput].forEach(clearError);
+
+  if (!validCardNumber.test(cleanCardNumber(cardNumberInput.value))) {
+    errors.push({ input: cardNumberInput, message: errorMessages.cardNumber });
+  }
+
+  if (!isValidExpiry(cardExpiryInput.value)) {
+    errors.push({ input: cardExpiryInput, message: errorMessages.cardExpiry });
+  }
+
+  if (!validCvc.test(cardCvcInput.value.trim())) {
+    errors.push({ input: cardCvcInput, message: errorMessages.cardCvc });
+  }
+
+  return errors;
+}
+
 // Saves the chosen gift and writes it into step 2's summary line
 function saveGift() {
   giftFrequency = form.querySelector('input[name="frequency"]:checked').value;
@@ -393,6 +479,73 @@ function saveGift() {
   giftAmountText.textContent = formatMoney(giftAmount);
   giftFrequencyText.textContent =
     giftFrequency === "monthly" ? "monthly" : "one-time";
+}
+
+// ----------------------------------------------------------
+// Step 3: fee, total and the fake payment
+// ----------------------------------------------------------
+
+// Works out the fee (2.9% + $0.30) and the total.
+// We work in whole cents so rounding is exact: computers can store
+// 25.50 as 25.4999…, which could put the answer a cent out.
+function getPaymentTotals() {
+  const giftCents = Math.round(giftAmount * 100);
+  const feeCents = Math.round(giftCents * 0.029) + 30;
+
+  let totalCents = giftCents;
+  if (coverFeeCheckbox.checked) {
+    totalCents = totalCents + feeCents;
+  }
+
+  return { fee: feeCents / 100, total: totalCents / 100 };
+}
+
+// Writes the fee, the monthly notice and the Give button's words
+function updatePaymentStep() {
+  const totals = getPaymentTotals();
+  const total = formatMoney(totals.total);
+
+  feeAmountText.textContent = formatMoney(totals.fee);
+  monthlyTotalText.textContent = total;
+  monthlyNotice.hidden = giftFrequency !== "monthly";
+
+  if (giftFrequency === "monthly") {
+    giveButton.textContent = "Give " + total + " monthly";
+  } else {
+    giveButton.textContent = "Give " + total + " once";
+  }
+}
+
+// Pretends to send the payment. Nothing leaves the page: we only check
+// whether the card is the test card, and keep that as true or false.
+function startPayment() {
+  const isTestCard = cleanCardNumber(cardNumberInput.value) === testCardNumber;
+
+  // aria-disabled tells screen readers the button can't be used right now,
+  // without moving their focus the way "disabled" would.
+  // The status message is read out, because a button's changing words often aren't.
+  isProcessing = true;
+  giveButton.textContent = "Processing your gift…";
+  giveButton.setAttribute("aria-disabled", "true");
+  paymentStatus.textContent = "Processing your gift…";
+
+  // Wait 1.5 seconds, like a real payment would
+  setTimeout(function () {
+    isProcessing = false;
+    giveButton.removeAttribute("aria-disabled");
+    paymentStatus.textContent = "";
+    updatePaymentStep();
+
+    if (isTestCard) {
+      // Empty the card boxes, so the numbers don't stay on the page
+      cardNumberInput.value = "";
+      cardExpiryInput.value = "";
+      cardCvcInput.value = "";
+      // Showing the thank-you step comes in the next step
+    } else {
+      showPaymentFailed();
+    }
+  }, 1500);
 }
 
 // ----------------------------------------------------------
@@ -422,10 +575,25 @@ backToStep1Button.addEventListener("click", function () {
   showStep(1);
 });
 
-// Pressing Continue: stop the page from reloading,
+// Back from step 3, but not while a payment is running
+backToStep2Button.addEventListener("click", function () {
+  if (!isProcessing) {
+    showStep(2);
+  }
+});
+
+// Ticking or unticking the fee box updates the totals
+coverFeeCheckbox.addEventListener("change", updatePaymentStep);
+
+// Pressing Continue or Give: stop the page from reloading,
 // then check the step that's showing
 form.addEventListener("submit", function (event) {
   event.preventDefault();
+
+  // Ignore extra presses while a payment is already running
+  if (isProcessing) {
+    return;
+  }
 
   if (currentStep === 1) {
     if (reportErrors(checkStep1())) {
@@ -434,7 +602,12 @@ form.addEventListener("submit", function (event) {
     }
   } else if (currentStep === 2) {
     if (reportErrors(checkStep2())) {
-      // Moving to step 3 comes in the next step
+      updatePaymentStep();
+      showStep(3);
+    }
+  } else if (currentStep === 3) {
+    if (reportErrors(checkStep3())) {
+      startPayment();
     }
   }
 });

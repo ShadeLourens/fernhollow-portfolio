@@ -98,6 +98,8 @@
             <span class="error-summary-icon" aria-hidden="true">!</span>
             <div>
               <h2 class="error-summary-title" id="error-summary-title"></h2>
+              <!-- Used for one-line messages, like a declined card -->
+              <p class="error-summary-text" id="error-summary-text"></p>
               <ul class="error-summary-list" id="error-summary-list"></ul>
             </div>
           </div>
@@ -415,6 +417,102 @@
               We use your details to process your gift and send your receipt.
               Read our <a href="#">Privacy Policy</a>.
             </p>
+          </section>
+
+          <!-- Step 3: Payment. Hidden until step 2 is done. -->
+          <section
+            class="form-step"
+            id="step-3"
+            aria-labelledby="step-3-heading"
+            hidden
+          >
+            <h2 id="step-3-heading" tabindex="-1">Step 3 of 3: Payment</h2>
+            <p class="required-note">
+              All fields are required unless marked optional.
+            </p>
+
+            <p class="demo-note">
+              <strong>This is a demo.</strong> No payment will be processed.
+              Use the test card <strong>4242 4242 4242 4242</strong> with any
+              future expiry date and any 3-digit CVC.
+            </p>
+
+            <!-- The card fields have no "name", so the browser can never
+                 include them if the form is ever submitted -->
+            <div class="field">
+              <label for="card-number">Card number</label>
+              <input
+                class="text-input"
+                type="text"
+                id="card-number"
+                inputmode="numeric"
+                autocomplete="cc-number"
+                aria-describedby="card-number-error"
+              />
+              <p class="error-message" id="card-number-error"></p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="card-expiry">Expiry date (MM/YY)</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  id="card-expiry"
+                  inputmode="numeric"
+                  autocomplete="cc-exp"
+                  aria-describedby="card-expiry-error"
+                />
+                <p class="error-message" id="card-expiry-error"></p>
+              </div>
+
+              <div class="field">
+                <label for="card-cvc">Security code (CVC)</label>
+                <input
+                  class="text-input"
+                  type="text"
+                  id="card-cvc"
+                  inputmode="numeric"
+                  autocomplete="cc-csc"
+                  aria-describedby="card-cvc-error"
+                />
+                <p class="error-message" id="card-cvc-error"></p>
+              </div>
+            </div>
+
+            <!-- Unticked by default. script.js fills in the fee. -->
+            <div class="checkbox-field">
+              <input type="checkbox" id="cover-fee" name="cover-fee" />
+              <label for="cover-fee">
+                Add <strong id="fee-amount">$1.75</strong> to cover processing
+                fees, so more of my gift goes to animals.
+              </label>
+            </div>
+
+            <!-- Shown by script.js only for monthly gifts -->
+            <p class="monthly-notice" id="monthly-notice" hidden>
+              You'll be charged <strong id="monthly-total">$15</strong> today
+              and then every month until you cancel. You can cancel at any
+              time.
+            </p>
+
+            <div class="step-buttons">
+              <button type="button" class="button-secondary" id="back-to-step-2">
+                Back
+              </button>
+              <!-- script.js writes the amount, like "Give $50 once" -->
+              <button type="submit" class="button-primary" id="give-button">
+                Give $50 once
+              </button>
+            </div>
+
+            <p class="privacy-note">
+              This is a demo, so card details are never sent or stored.
+            </p>
+
+            <!-- Hidden on screen. Screen readers announce what's put in here,
+                 like "Processing your gift…" -->
+            <p class="visually-hidden" role="status" id="payment-status"></p>
           </section>
         </form>
       </div>
