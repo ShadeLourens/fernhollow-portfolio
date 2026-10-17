@@ -179,6 +179,11 @@ a {
   background: var(--orange);
 }
 
+/* While a payment is processing, the Give button can't be pressed again */
+.button-primary[aria-disabled="true"] {
+  cursor: progress;
+}
+
 /* The quieter button, used for Back: navy outline on white */
 .button-secondary {
   padding: 14px 24px;
@@ -588,7 +593,9 @@ legend {
 
 /* --- Step 2 pieces --- */
 
-.gift-summary {
+/* Light grey boxes for the gift summary (step 2) and monthly notice (step 3) */
+.gift-summary,
+.monthly-notice {
   padding: 12px 16px;
   border-radius: var(--radius-md);
   background: var(--mist);
@@ -622,9 +629,20 @@ legend {
   width: auto;
 }
 
+/* The privacy line (step 2) and the "never sent or stored" line (step 3) */
 .privacy-note {
   color: var(--slate);
   font-size: 0.95rem;
+}
+
+/* --- Step 3 pieces --- */
+
+/* The demo note: peach with an orange stripe, navy text (12.7:1) */
+.demo-note {
+  padding: 12px 16px;
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius-sm);
+  background: var(--peach);
 }
 
 /* --- Errors --- */
@@ -701,6 +719,17 @@ legend {
   font-family: var(--font-heading);
   font-size: 1.0625rem;
   font-weight: 800;
+}
+
+.error-summary-text {
+  margin-top: 6px;
+}
+
+/* The summary uses either the one-line text or the list,
+   so whichever one is empty takes up no space */
+.error-summary-text:empty,
+.error-summary-list:empty {
+  display: none;
 }
 
 /* A bulleted list, so each error reads as its own item */
