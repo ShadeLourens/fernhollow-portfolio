@@ -620,6 +620,9 @@ function showLinkCopied() {
 // If the browser can't copy, show the link in a box, already selected,
 // so the donor can copy it with Cmd+C or Ctrl+C
 function showCopyFallback(link) {
+  // In case an earlier copy worked, so the button doesn't say "Link copied"
+  copyLinkButton.textContent = "Copy link";
+  thankYouStatus.textContent = "";
   shareLinkInput.value = link;
   copyFallback.hidden = false;
   shareLinkInput.focus();
