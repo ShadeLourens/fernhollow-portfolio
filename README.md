@@ -1,8 +1,10 @@
-# Fernhollow Animal Alliance: donation form
+# Fernhollow Animal Alliance: donation form and petition
 
-A multi-step donation form for a fictional animal charity, built with plain HTML, CSS and JavaScript. No framework, no build step, no third-party scripts.
+A multi-step donation form and a petition page for a fictional animal charity, built with plain HTML, CSS and JavaScript. No framework, no build step, no third-party scripts, no cookies.
 
-**[Try the live demo](https://shadelourens.github.io/fernhollow-portfolio/)**. Use the test card `4242 4242 4242 4242` with any future expiry date and any 3-digit CVC. No payment is processed.
+**[Try the donation form](https://shadelourens.github.io/fernhollow-portfolio/)**. Use the test card `4242 4242 4242 4242` with any future expiry date and any 3-digit CVC. No payment is processed.
+
+**[Try the petition](https://shadelourens.github.io/fernhollow-portfolio/petition.html)**. No signatures are stored.
 
 Built by **Shade Lourens** · [LinkedIn](https://www.linkedin.com/in/shadelourens)
 
@@ -15,9 +17,23 @@ Built by **Shade Lourens** · [LinkedIn](https://www.linkedin.com/in/shadelouren
 1. **Choose your gift:** give once or monthly, preset amounts or your own, with a message showing what each amount does.
 2. **Your details:** name, email, country and postal code, with an email opt-in that's unticked by default.
 3. **Payment:** a demo card form with an optional processing fee (2.9% + $0.30) and the total on the Give button.
-4. **Thank you:** the donor's name and total, what their gift does, a petition card, Copy link, an updates sign-up and Restart demo.
+4. **Thank you:** the donor's name and total, what their gift does, a link to the petition, Copy link, an updates sign-up and Restart demo.
 
 There's also an **A/B test** on the headline: add `?v=b` to the address to see variant B.
+
+### The petition page
+
+- **Fields:** first name, last name, email and postal code. The postal code shows lawmakers how many signers live in their area, and the page says so.
+- **Opt-in:** an email opt-in that's unticked by default, a "This is a demo" note and a privacy line.
+- **The same validation, error summary and focus rules** as the donation form.
+- **After signing:** a thank-you, then a next ask. "Give $50 today" links to the donation form with UTM tags (`utm_source=petition`, `utm_content=petition-thank-you`), so reports can show which gifts came from the petition. The link carries no personal details.
+
+### The supporter journey
+
+Together with the [Fernhollow emails](https://shadelourens.github.io/fernhollow-emails/) ([code](https://github.com/ShadeLourens/fernhollow-emails)), the portfolio covers two paths a supporter can take:
+
+- appeal email → donation form → thank-you → receipt email
+- petition → thank-you → donation form
 
 ## Accessibility
 
@@ -33,14 +49,14 @@ Built to WCAG 2.2 AA from the start, not checked at the end.
 
 ## Testing
 
-| Check | Result | Proof |
-|---|---|---|
-| Keyboard only | Every step, the errors and the thank-you step work without a mouse | Tested by hand |
-| Screen reader | Tested with VoiceOver in Safari | Tested by hand |
-| Lighthouse (mobile, live site) | 100 for Performance, Accessibility, Best Practices and SEO | [Scores](testing-screenshots/live-lighthouse-scores.png) |
-| axe DevTools | 0 issues on steps 1, 2 and 3, the thank-you step, and step 2 with errors showing | [Step 1](testing-screenshots/axe-step1.png) · [Step 2](testing-screenshots/axe-step2.png) · [Step 2 with errors](testing-screenshots/axe-step2-with-errors.png) · [Step 3](testing-screenshots/live-axe-step3.png) · [Thank you](testing-screenshots/live-axe-thank-you.png) |
+| Check                          | Result                                                                           | Proof                                                                                                                                                                                                                                                                        |
+| ------------------------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Keyboard only                  | Every step, the errors and the thank-you step work without a mouse               | Tested by hand                                                                                                                                                                                                                                                               |
+| Screen reader                  | Tested with VoiceOver in Safari                                                  | Tested by hand                                                                                                                                                                                                                                                               |
+| Lighthouse (mobile, live site) | 100 for Performance, Accessibility, Best Practices and SEO                       | [Scores](testing-screenshots/live-lighthouse-scores.png)                                                                                                                                                                                                                     |
+| axe DevTools                   | 0 issues on steps 1, 2 and 3, the thank-you step, and step 2 with errors showing | [Step 1](testing-screenshots/axe-step1.png) · [Step 2](testing-screenshots/axe-step2.png) · [Step 2 with errors](testing-screenshots/axe-step2-with-errors.png) · [Step 3](testing-screenshots/live-axe-step3.png) · [Thank you](testing-screenshots/live-axe-thank-you.png) |
 
-The free version of axe checks the WCAG 2.1 AA rules. I checked the rules added in 2.2 (like tap size and focus not being hidden) by hand.
+The free version of axe checks the WCAG 2.1 AA rules. The two rules added in 2.2 that apply here (tap size and focus not being hidden) were checked against the design by my reviewer chat: buttons are well over 24px, and nothing sticky covers a focused element.
 
 More screenshots, including phone layouts and error states, are in [`testing-screenshots/`](testing-screenshots/).
 
@@ -51,32 +67,35 @@ More screenshots, including phone layouts and error states, are in [`testing-scr
 - **Fees are worked out in whole cents**, so rounding is always exact.
 - **The shared link drops `?v=b`**, so friends aren't all put into one A/B group.
 - **The impact line repeats on the thank-you step**, telling donors what their money does straight after they give.
-- **The petition button says "(demo)"** and explains there's no petition page, instead of linking nowhere.
+- **The petition's fields have no `name` either**, so a signer's details can never end up in a page address, browser history or server log.
+- **No personal details in links between pages.** Engaging Networks' own documentation says: "We do not recommend including personally identifiable information or sensitive data in a URL" ([source](https://knowledge.engagingnetworks.net/youraccount/pre-populating-form-fields)).
+- **The petition copies the donation page's error functions** instead of sharing them, so the tested donation page didn't have to change. In a bigger project they'd be shared in one file.
+
+### In a real Engaging Networks setup
+
+The petition and the donation form would be built as Engaging Networks pages and joined with **"Link to campaign" (chaining)**. Engaging Networks' documentation says chaining keeps "any supporter information which means it can pre-populate any supporter fields on the landing page", and that it's "especially useful when linking to a donation page from an advocacy page" ([source](https://knowledge.engagingnetworks.net/pages/pages-chaining-and-redirecting)). So a signer wouldn't have to type their details again. This demo can't do that on GitHub Pages, so it uses a plain link with UTM tags instead.
 
 ## How I built it
 
-**Brand first.** I came up with Fernhollow Animal Alliance and designed its logos, color palette and brand identity myself. I gave those designs to Claude Code as visual reference before any development started.
+I designed the donation page, the emails, the brand board and the logos, and I set the rules before any code was written: the brand, accessibility and "clear over clever" standards in [`CLAUDE.md`](CLAUDE.md). The petition page uses the same design as the donation page.
 
-**Then the build, with Claude Code** as my AI coding assistant. For each part I:
+Claude Code wrote the plans and the code. I reviewed each plan myself and with a separate Claude conversation, then edited, rejected or approved it. Some ideas started with me, like the "Give now" jump link on phones and building out the full thank-you step. Others came from the review, like the hidden "Error:" text that tells screen reader users a message is an error. Either way, the final call was mine.
 
-1. asked Claude for a plan in plain words
-2. reviewed it, made the design and accessibility calls, and approved it
-3. let Claude write the code, then tested it myself with a keyboard, VoiceOver, axe and Lighthouse.
-
-Working this way let me move quickly while keeping every decision my own. The build commits from step 2 onward are co-authored with Claude, so the history shows how the work was done. [`NOTES.md`](NOTES.md) records what I asked for and why I made each decision. [`CLAUDE.md`](CLAUDE.md) holds the project rules I gave Claude, like "clear over clever" and the brand and accessibility rules.
+I tested everything myself with a keyboard, VoiceOver, axe and Lighthouse. The build commits from step 2 onward are co-authored with Claude, and [`NOTES.md`](NOTES.md) records what I asked for and why.
 
 ## What I'd do next
 
-- **A petition page** that feeds into the donation form, so signers are asked to give next.
 - **A real payment provider's hosted card fields**, so card details never touch the page at all.
 - **A proper A/B testing tool** instead of `?v=b`, with random assignment and results tracking.
 
 ## Files
 
 ```
-index.html             the page
+index.html             the donation form
+petition.html          the petition page
 styles.css             all the styling, with brand colors as CSS variables
-script.js              steps, validation and the fake payment
+script.js              the donation form: steps, validation and the fake payment
+petition.js            the petition: validation and the thank-you
 assets/                logos, photos and fonts
 testing-screenshots/   Lighthouse, axe and layout screenshots
 NOTES.md               my working notes

@@ -1,1 +1,4 @@
 .DS_Store
+
+# Reference files kept on this computer only, never committed
+local-reference/

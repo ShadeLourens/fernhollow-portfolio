@@ -4,19 +4,22 @@ Owner: Shade Lourens. I want to understand and be able to explain every line in 
 
 ## What this is
 
-One donation page for **Fernhollow Animal Alliance**, a fictional animal charity, built as a portfolio piece. It's plain HTML, CSS and a small amount of JavaScript. There's no framework, no build step and no npm.
+A donation page and a petition page for **Fernhollow Animal Alliance**, a fictional animal charity, built as a portfolio piece. The petition's thank-you links to the donation page. It's plain HTML, CSS and a small amount of JavaScript. There's no framework, no build step and no npm.
 
 Fernhollow is fictional. Never use a real organization's name, logo or branding.
 
 ## Files
 
 ```
-index.html     the page
-styles.css     all the styling
-script.js      steps, validation and the fake payment
+index.html     the donation page
+petition.html  the petition page
+styles.css     all the styling (petition styles are at the end)
+script.js      the donation page: steps, validation and the fake payment
+petition.js    the petition page: validation and the thank-you
 assets/        logos, Biscuit photos, fonts
 assets/reference/   design and old notes (reference only, never edit)
 testing-screenshots/   screenshots from testing, named by step (like step2-errors-320-and-560.png)
+local-reference/   my private reference files (in .gitignore, never committed)
 ```
 
 Don't add new files or folders without asking me first.

@@ -59,8 +59,6 @@ const thankYouGift = document.querySelector("#thank-you-gift");
 const thankYouEmail = document.querySelector("#thank-you-email");
 const thankYouImpact = document.querySelector("#thank-you-impact");
 const thankYouStatus = document.querySelector("#thank-you-status");
-const petitionButton = document.querySelector("#petition-button");
-const petitionNote = document.querySelector("#petition-note");
 const copyLinkButton = document.querySelector("#copy-link-button");
 const copyFallback = document.querySelector("#copy-fallback");
 const shareLinkInput = document.querySelector("#share-link");
@@ -647,7 +645,6 @@ function restartDemo() {
   copyLinkButton.textContent = "Copy link";
   copyFallback.hidden = true;
   shareLinkInput.value = "";
-  petitionNote.textContent = "";
   thankYouStatus.textContent = "";
   updatesButton.hidden = false;
   updatesDone.hidden = true;
@@ -724,12 +721,6 @@ form.addEventListener("submit", function (event) {
       startPayment();
     }
   }
-});
-
-// The petition: explain it's a demo instead of linking nowhere
-petitionButton.addEventListener("click", function () {
-  petitionNote.textContent =
-    "This is a demo, so there's no petition page. In a real campaign, this would open the petition.";
 });
 
 // Copy link. The clipboard only works on secure (HTTPS) pages.
