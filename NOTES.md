@@ -132,3 +132,70 @@ Keyboard only on steps 1 and 2: Tab moves between groups and fields, the arrows 
   `navigator.clipboard.writeText = () => Promise.reject()` in the Console.
 - VoiceOver check: "Processing your gift…", "Link copied", the petition note and the sign-up message.
 - Run axe and Lighthouse again on step 3 and the thank-you step.
+
+## 2026-10-21
+
+**Asked Claude to:** plan and build the petition page, link it from the donation thank-you step, and update the README and CLAUDE.md.
+
+**What I changed:**
+
+- Added `petition.html` and `petition.js`: first name, last name, email and postal code, an unticked opt-in, a demo note, a privacy line, and "Sign the petition".
+- Same validation, error summary and focus rules as the donation page. The error functions are copied from `script.js`, so the tested donation page didn't change.
+- After signing: "Thank you, {first name}. You've signed the petition.", a demo line, and a $50 ask linking to the donation page with UTM tags (`utm_source=petition`, `utm_content=petition-thank-you`) and no personal details.
+- Petition styles added at the end of `styles.css`, reusing the donation page's classes.
+- The donation thank-you step's "Sign petition (demo)" button is now a real "Sign the petition" link.
+- README: the petition page, the supporter journey with the emails project, the Engaging Networks chaining note, and my own "How I built it" wording.
+- CLAUDE.md: mentions the petition, plus the new files and `local-reference/`.
+- Created `local-reference/` (in `.gitignore`) for my private reference files.
+- This repo now commits with my GitHub noreply email. Older commits keep the old address.
+
+**Decisions:**
+
+- I wrote the petition brief and designed the page. My Claude chat wrote the website copy. The petition statement sits in a cream box, like my design.
+- The "Sign now" jump link on phones (Same as Donation page)
+- Fields without a `name`, so details can never end up in a page address: Claude suggested it, and I approved it.
+- Copying the error functions instead of sharing them: from my reviewer chat. I agreed, because it keeps the tested donation page untouched.
+- Postal code hint ("So lawmakers can see how many people in their area have signed"): I asked for a line, and approved Claude's wording.
+- No cookie banner, because the page sets no cookies, so a banner would be misleading.
+- No personal details in the $50 link. Claude found the same advice in Engaging Networks' docs.
+- Claude checked Engaging Networks' docs before the README mentions chaining (which carries supporter details between pages), and quotes them.
+- Claude pointed out that UTM tags on links within one site can overwrite the original source in Google Analytics. I kept them, because there's no analytics here, and the README explains a real setup would use chaining.
+- Claude confirmed the WCAG 2.2 rules for me.
+
+**Tested:**
+
+- Claude's automated checks: empty form, summary links, one error, signing, the $50 link, restart, no named fields, no cookies or storage, and the donation page still working.
+
+**Still to do:**
+
+- Oct 22: test the petition page myself: keyboard, VoiceOver, axe (form, errors, thank-you) and Lighthouse (Navigation and Snapshot modes). Add the results to the README's Testing table.
+- Commit and merge the petition branch.
+
+## 2026-10-22
+
+**Asked Claude to:** pick up from the handoff notes after my restart, walk me through testing the petition page, check all the files before pushing, commit and push the petition branch, rename my test screenshots, and draft the petition rows for the README's Testing table.
+
+**What I changed:**
+
+- Committed the petition page in two commits, pushed the `petition-page` branch, and merged pull request #5.
+- Made a `testing-screenshots/petition-page/` folder for the petition screenshots.
+- README: added petition rows to the Testing table (keyboard, VoiceOver, small screens and zoom, Lighthouse and axe), with screenshot links.
+
+**Decisions:**
+
+- Kept "Give $50 today" as a link, even though Space doesn't press it. Claude explained that links work with Enter and buttons with Enter and Space, and it's a link because it goes to another page.
+- Kept Restart demo on the petition thank-you.
+- On the donation page, I once saw the "Give monthly" layout break in Safari. When I tested again, everything was normal, so I left it.
+- My Claude chat reviewed the Testing rows and suggested adding the small screens and zoom row and checking the donation thank-you step again. I agreed.
+
+**Tested:**
+
+- Me, on my computer: keyboard only (skip link, form, error summary links, one error, thank-you, $50 link, Restart demo, "Sign now" at 320px) and VoiceOver in Safari (headings, labels, postal code hint, errors, thank-you heading, link and button names).
+- Me, on the live site: axe on the form, the form with errors and the thank-you (0 issues), and Lighthouse mobile (100 for all four, and 23/23 accessibility checks on the thank-you in Snapshot mode).
+- Me: the donation thank-you step again with Lighthouse Snapshot after the petition link change (26/26 accessibility checks).
+- Claude, by script: the $50 link works with Enter, and the live petition page has no sideways scrolling at 320px or at 200% zoom.
+- After merging, the live site showed old files at first. A hard reload (Cmd+Shift+R) fixed it, because GitHub Pages lets browsers keep saved copies for 10 minutes.
+
+**Still to do:**
+
+- Commit the test results, screenshots and these notes.
