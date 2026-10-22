@@ -432,9 +432,9 @@
             </p>
 
             <p class="demo-note">
-              <strong>This is a demo.</strong> No payment will be processed.
-              Use the test card <strong>4242 4242 4242 4242</strong> with any
-              future expiry date and any 3-digit CVC.
+              <strong>This is a demo.</strong> No payment will be processed. Use
+              the test card <strong>4242 4242 4242 4242</strong> with any future
+              expiry date and any 3-digit CVC.
             </p>
 
             <!-- The card fields have no "name", so the browser can never
@@ -492,12 +492,15 @@
             <!-- Shown by script.js only for monthly gifts -->
             <p class="monthly-notice" id="monthly-notice" hidden>
               You'll be charged <strong id="monthly-total">$15</strong> today
-              and then every month until you cancel. You can cancel at any
-              time.
+              and then every month until you cancel. You can cancel at any time.
             </p>
 
             <div class="step-buttons">
-              <button type="button" class="button-secondary" id="back-to-step-2">
+              <button
+                type="button"
+                class="button-secondary"
+                id="back-to-step-2"
+              >
                 Back
               </button>
               <!-- script.js writes the amount, like "Give $50 once" -->
@@ -538,30 +541,30 @@
           <!-- script.js fills in the amount, how often and the email -->
           <p>
             Your <strong id="thank-you-gift">$50 one-time</strong> gift is
-            helping dogs like Biscuit get the care and the home they deserve.
-            A receipt is on its way to <strong id="thank-you-email"></strong>.
+            helping dogs like Biscuit get the care and the home they deserve. A
+            receipt is on its way to <strong id="thank-you-email"></strong>.
           </p>
           <!-- Straight after the receipt sentence, because it's about that sentence -->
-          <p class="privacy-note demo-email-note">Demo: no email is actually sent.</p>
+          <p class="privacy-note demo-email-note">
+            Demo: no email is actually sent.
+          </p>
           <!-- What the gift does, reusing step 1's impact lines -->
           <p class="thank-you-impact" id="thank-you-impact"></p>
 
           <div class="thank-you-card">
             <h3>Add your voice</h3>
             <p>Sign our petition to end puppy mill cruelty.</p>
-            <!-- There's no petition page, so the button says "(demo)" and
-                 explains instead of linking nowhere -->
-            <button type="button" class="button-primary" id="petition-button">
-              Sign petition (demo)
-            </button>
-            <!-- A status message: screen readers read it out when it's filled -->
-            <p class="thank-you-note" id="petition-note" role="status"></p>
+            <a href="petition.html" class="button-primary">Sign the petition</a>
           </div>
 
           <div class="thank-you-card">
             <h3>Spread the word</h3>
             <p>Share this campaign with a friend.</p>
-            <button type="button" class="button-secondary" id="copy-link-button">
+            <button
+              type="button"
+              class="button-secondary"
+              id="copy-link-button"
+            >
               Copy link
             </button>
             <!-- Shown only if the browser can't copy for us -->
@@ -583,7 +586,11 @@
             </p>
           </div>
 
-          <button type="button" class="button-secondary restart-button" id="restart-button">
+          <button
+            type="button"
+            class="button-secondary restart-button"
+            id="restart-button"
+          >
             Restart demo
           </button>
 
