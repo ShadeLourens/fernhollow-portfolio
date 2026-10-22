@@ -997,3 +997,93 @@ legend {
       color 0.15s;
   }
 }
+
+/* ==========================================================
+   Petition page (petition.html)
+   It reuses the donation page's header, card, field, error, button
+   and demo note styles. Only these pieces are new.
+   ========================================================== */
+
+/* The petition's words: a cream box with an orange line on top,
+   as wide as the photo above it */
+.petition-statement {
+  max-width: 480px;
+  margin-top: 32px;
+  padding: 20px 24px;
+  border-top: 4px solid var(--orange);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: var(--cream);
+}
+
+/* "The petition": a small label, like the campaign tag */
+.petition-statement h2 {
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.petition-statement p {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* The form and the thank-you stack their parts with even space,
+   like a donation step */
+.petition-form,
+.petition-thank-you {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.petition-form h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.25;
+  /* Leaves a little space above the heading when focus scrolls to it */
+  scroll-margin-top: 16px;
+}
+
+.petition-thank-you h2 {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.2;
+  scroll-margin-top: 16px;
+}
+
+.petition-thank-you img,
+.petition-thank-you .link-button {
+  align-self: flex-start;
+}
+
+/* The next ask sits under a thin dividing line */
+.next-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.next-ask h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.next-ask .button-primary {
+  margin-top: 8px;
+}
+
+/* Postal codes are short, so from 480px the box is as wide as one
+   of the name boxes above it */
+@media (min-width: 30em) {
+  .postal-code-field .text-input {
+    max-width: calc(50% - 12px);
+  }
+}

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign the petition | Fernhollow Animal Alliance</title>
+    <meta
+      name="description"
+      content="Add your name to Fernhollow Animal Alliance's petition to end puppy mill cruelty. Fernhollow is a fictional charity."
+    />
+    <link rel="icon" href="assets/FAA-Logo-Mark.svg" type="image/svg+xml" />
+
+    <!-- Start downloading the two main fonts early, so text doesn't jump when they arrive -->
+    <link
+      rel="preload"
+      href="assets/fonts/nunito-sans-latin-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/atkinson-hyperlegible-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <!-- "defer" runs the script after the page has been built -->
+    <script src="petition.js" defer></script>
+  </head>
+  <body>
+    <!-- Lets keyboard users jump past the header. Hidden until it gets focus. -->
+    <a class="skip-link" href="#petition">Skip to the petition</a>
+
+    <!-- Header and footer are copied from index.html. With no templating,
+         copying is the simplest way to share them. -->
+    <header class="site-header">
+      <a href="index.html" class="logo-link">
+        <img
+          src="assets/FAA-Logo-horizontal.svg"
+          alt="Fernhollow Animal Alliance home"
+          width="220"
+          height="47"
+        />
+      </a>
+      <a href="#" class="header-link">Contact us</a>
+    </header>
+
+    <main class="page">
+      <!-- Left column: why the petition matters -->
+      <div class="story">
+        <p class="campaign-tag">Second Chances Campaign</p>
+        <h1>Help end puppy mill cruelty</h1>
+        <p class="intro">
+          Biscuit spent the first five months of his life in a wire cage, in a
+          barn with dozens of other dogs. He's safe now. Many dogs like him
+          aren't.
+        </p>
+        <!-- On phones the form is below the photo, so this jumps straight to it. CSS hides it on wide screens. -->
+        <a href="#petition" class="jump-link">Sign now</a>
+        <!-- Phones get the smaller 480px photo -->
+        <img
+          class="story-photo"
+          src="assets/Biscuit-puppy-optimized.jpg"
+          srcset="
+            assets/Biscuit-puppy-optimized-480.jpg 480w,
+            assets/Biscuit-puppy-optimized.jpg     962w
+          "
+          sizes="(max-width: 600px) 100vw, 480px"
+          width="962"
+          height="720"
+          alt="Biscuit, a small scruffy puppy, looks out through the bars of a wire cage."
+        />
+
+        <div class="petition-statement">
+          <h2>The petition</h2>
+          <p>
+            To our state lawmakers: We ask you to pass stronger laws to end
+            puppy mill cruelty, with regular inspections of breeding sites,
+            limits on how many dogs one site can keep, and real penalties for
+            neglect.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right column: the petition card -->
+      <div class="form-card" id="petition">
+        <!-- novalidate turns off the browser's own error bubbles, so we can show our own messages.
+             The fields have no "name", so the browser can never put anyone's
+             details into the page address, even if the script fails. -->
+        <form class="petition-form" id="petition-form" novalidate>
+          <!-- tabindex="-1" lets Restart demo move focus back here -->
+          <h2 id="petition-heading" tabindex="-1">Add your name</h2>
+
+          <!-- Error summary. Shown by petition.js when there's more than one error.
+               tabindex="-1" lets focus move here. -->
+          <div class="error-summary" id="error-summary" tabindex="-1" hidden>
+            <span class="error-summary-icon" aria-hidden="true">!</span>
+            <div>
+              <h3 class="error-summary-title" id="error-summary-title"></h3>
+              <ul class="error-summary-list" id="error-summary-list"></ul>
+            </div>
+          </div>
+
+          <!-- Pairs of fields: side by side from 480px, stacked on small phones -->
+          <div class="field-row">
+            <div class="field">
+              <label for="first-name">First name</label>
+              <input
+                class="text-input"
+                type="text"
+                id="first-name"
+                autocomplete="given-name"
+                aria-describedby="first-name-error"
+              />
+              <p class="error-message" id="first-name-error"></p>
+            </div>
+            <div class="field">
+              <label for="last-name">Last name</label>
+              <input
+                class="text-input"
+                type="text"
+                id="last-name"
+                autocomplete="family-name"
+                aria-describedby="last-name-error"
+              />
+              <p class="error-message" id="last-name-error"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input
+              class="text-input"
+              type="email"
+              id="email"
+              autocomplete="email"
+              aria-describedby="email-error"
+            />
+            <p class="error-message" id="email-error"></p>
+          </div>
+
+          <div class="field postal-code-field">
+            <label for="postal-code">Postal code</label>
+            <p class="hint" id="postal-code-hint">
+              So lawmakers can see how many people in their area have signed.
+            </p>
+            <input
+              class="text-input"
+              type="text"
+              id="postal-code"
+              autocomplete="postal-code"
+              aria-describedby="postal-code-hint postal-code-error"
+            />
+            <p class="error-message" id="postal-code-error"></p>
+          </div>
+
+          <!-- Unticked by default -->
+          <div class="checkbox-field">
+            <input type="checkbox" id="email-updates" />
+            <label for="email-updates">
+              Yes, email me updates about this campaign and other ways to help.
+              You can unsubscribe at any time.
+            </label>
+          </div>
+
+          <p class="demo-note">
+            <strong>This is a demo.</strong> Your details aren't sent or stored.
+          </p>
+
+          <button type="submit" class="button-primary">
+            Sign the petition
+          </button>
+
+          <p class="privacy-note">
+            We'll only use your details to add your name to this petition, and
+            to email you if you tick the box above. Read our
+            <a href="#">Privacy Policy</a>.
+          </p>
+        </form>
+
+        <!-- Shown by petition.js after signing. It sits outside the form,
+             so its buttons can never submit it. -->
+        <section
+          class="petition-thank-you"
+          id="petition-thank-you"
+          aria-labelledby="petition-thank-you-heading"
+          hidden
+        >
+          <img src="assets/FAA-Logo-Mark.svg" alt="" width="64" height="54" />
+          <!-- tabindex="-1" lets the script move focus here -->
+          <h2 id="petition-thank-you-heading" tabindex="-1">
+            Thank you, <span id="signer-name"></span>. You've signed the
+            petition.
+          </h2>
+          <p class="demo-note">Demo: your signature isn't stored.</p>
+
+          <div class="next-ask">
+            <h3>Can you go one step further?</h3>
+            <p>
+              Signatures change laws. Gifts rescue dogs today. $50 helps give a
+              rescued dog vaccinations and a safe place to recover.
+            </p>
+            <!-- UTM tags show reports that this gift came from the petition.
+                 No personal details go in the link. #donate lands on the form. -->
+            <a
+              class="button-primary"
+              href="index.html?utm_source=petition&amp;utm_medium=web&amp;utm_campaign=second-chances&amp;utm_content=petition-thank-you#donate"
+            >
+              Give $50 today
+            </a>
+          </div>
+
+          <button type="button" class="link-button" id="restart-petition">
+            Restart demo
+          </button>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Contact us</a></li>
+      </ul>
+      <p class="footer-note">
+        Fernhollow Animal Alliance is a fictional organization created for a
+        portfolio. No signatures or payments are processed. The photo is
+        AI-generated.
+      </p>
+    </footer>
+  </body>
+</html>
